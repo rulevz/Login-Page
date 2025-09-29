@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Animated Login & Register Form</title>
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+      color: #fff;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: transparent;
+      /* Tetap transparan */
+    }
+
+    .container {
+      position: relative;
+      width: 550px;
+      height: 350px;
+      border: 2px solid #e46033;
+      box-shadow: 0 0 25px #e46033;
+      overflow: hidden;
+      border-radius: 15px;
+      /* Tambahkan background solid atau gradient di sini */
+      background: linear-gradient(135deg, #25252b 60%, #e46033 100%);
+    }
+
+    .container .form-box {
+      position: absolute;
+      top: 0;
+      width: 50%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+    }
+
+    .form-box.Login {
+      left: 0;
+      padding: 0 25px;
+    }
+
+    .form-box.Login .animation {
+      transform: translateX(0%);
+      transition: .7s;
+      opacity: 1;
+      transition-delay: calc(.1s * var(--S));
+    }
+
+    .container.active .form-box.Login .animation {
+      transform: translateX(-120%);
+      opacity: 0;
+      transition-delay: calc(.1s * var(--D));
+    }
+
+    .form-box.Register {
+      right: 0;
+      padding: 0 30px;
+      justify-content: flex-start;
+      padding-top: 5px;
+    }
+
+    .form-box.Register .animation {
+      transform: translateX(120%);
+      transition: .7s ease;
+      opacity: 0;
+      filter: blur(10px);
+      transition-delay: calc(.1s * var(--S));
+    }
+
+    .container.active .form-box.Register .animation {
+      transform: translateX(0%);
+      opacity: 1;
+      filter: blur(0px);
+      transition-delay: calc(.1s * var(--li));
+    }
+
+    .form-box h2 {
+      font-size: 22px;
+      text-align: center;
+      margin-bottom: 5px;
+    }
+
+    .form-box .input-box {
+      position: relative;
+      width: 100%;
+      height: 40px;
+      margin-top: 15px;
+    }
+
+    .input-box input {
+      width: 100%;
+      height: 100%;
+      background: transparent;
+      border: none;
+      outline: none;
+      font-size: 13px;
+      color: #fff;
+      font-weight: 600;
+      border-bottom: 2px solid #fff;
+      padding-right: 23px;
+      transition: .5s;
+    }
+
+    .input-box input:focus,
+    .input-box input:valid {
+      border-bottom: 2px solid #e46033;
+    }
+
+    .input-box label {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      transform: translateY(-50%);
+      font-size: 13px;
+      color: #fff;
+      transition: .5s;
+    }
+
+    .input-box input:focus~label,
+    .input-box input:valid~label {
+      top: -5px;
+      color: #e46033;
+    }
+
+    .input-box box-icon {
+      position: absolute;
+      top: 50%;
+      right: 0;
+      font-size: 15px;
+      transform: translateY(-50%);
+      color: #fff;
+    }
+
+    .input-box input:focus~box-icon,
+    .input-box input:valid~box-icon {
+      color: #e46033;
+    }
+
+    .btn {
+      position: relative;
+      width: 100%;
+      height: 35px;
+      background: transparent;
+      border-radius: 40px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      border: 2px solid #e46033;
+      overflow: hidden;
+      z-index: 1;
+      margin-top: 15px;
+    }
+
+    .btn::before {
+      content: "";
+      position: absolute;
+      height: 300%;
+      width: 100%;
+      background: linear-gradient(#25252b, #e46033, #25252b, #e46033);
+      top: -100%;
+      left: 0;
+      z-index: -1;
+      transition: .5s;
+    }
+
+    .btn:hover:before {
+      top: 0;
+    }
+
+    .regi-link {
+      font-size: 11px;
+      text-align: center;
+      margin: 8px 0 4px;
+    }
+
+    .regi-link a {
+      text-decoration: none;
+      color: #e46033;
+      font-weight: 600;
+    }
+
+    .regi-link a:hover {
+      text-decoration: underline;
+    }
+
+    .info-content {
+      position: absolute;
+      top: 0;
+      height: 100%;
+      width: 50%;
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+    }
+
+    .info-content.Login {
+      right: 0;
+      text-align: right;
+      padding: 0 25px 30px 100px;
+    }
+
+    .info-content.Login .animation {
+      transform: translateX(0);
+      transition: .7s ease;
+      transition-delay: calc(.1s * var(--S));
+      opacity: 1;
+      filter: blur(0px);
+    }
+
+    .container.active .info-content.Login .animation {
+      transform: translateX(120%);
+      opacity: 0;
+      filter: blur(10px);
+      transition-delay: calc(.1s * var(--D));
+    }
+
+    .info-content.Register {
+      left: 0;
+      text-align: left;
+      padding: 0 100px 30px 25px;
+      pointer-events: none;
+    }
+
+    .info-content.Register .animation {
+      transform: translateX(-120%);
+      transition: .7s ease;
+      opacity: 0;
+      filter: blur(10PX);
+      transition-delay: calc(.1s * var(--S));
+    }
+
+    .container.active .info-content.Register .animation {
+      transform: translateX(0%);
+      opacity: 1;
+      filter: blur(0);
+      transition-delay: calc(.1s * var(--li));
+    }
+
+    .info-content .logo-container {
+      margin-bottom: 0.5rem;
+      /* dari 1rem, bisa dikurangi lagi jika perlu */
+    }
+
+    .info-content h2 {
+      margin-top: 0;
+      margin-bottom: 4px;
+      /* lebih rapat ke logo */
+      font-size: 22px;
+    }
+
+    .info-content p {
+      margin-top: 0;
+      font-size: 12px;
+      line-height: 1.4;
+    }
+
+    .container .curved-shape {
+      position: absolute;
+      right: 0;
+      top: -5px;
+      height: 450px;
+      width: 650px;
+      background: linear-gradient(45deg, #25252b, #e46033);
+      transform: rotate(10deg) skewY(40deg);
+      transform-origin: bottom right;
+      transition: 1.5s ease;
+      transition-delay: 1.6s;
+    }
+
+    .container.active .curved-shape {
+      transform: rotate(0deg) skewY(0deg);
+      transition-delay: .5s;
+    }
+
+    .container .curved-shape2 {
+      position: absolute;
+      left: 180px;
+      top: 100%;
+      height: 520px;
+      width: 650px;
+      background: #25252b;
+      border-top: 3px solid #e46033;
+      transform: rotate(0deg) skewY(0deg);
+      transform-origin: bottom left;
+      transition: 1.5s ease;
+      transition-delay: .5s;
+    }
+
+    .container.active .curved-shape2 {
+      transform: rotate(-11deg) skewY(-41deg);
+      transition-delay: 1.2s;
+    }
+
+    .error-message {
+      position: absolute;
+      bottom: -18px;
+      left: 0;
+      color: #ff4444;
+      font-size: 11px;
+      opacity: 0;
+      transform: translateY(5px);
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .error-message.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .error-message i {
+      font-size: 12px;
+    }
+
+    .input-box {
+      position: relative;
+      margin-bottom: 22px;
+    }
+
+    .loading {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+
+    /* Perbaikan untuk logo - ukuran dan posisi yang konsisten */
+    .logo-container {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 1rem;
+      /* Diperkecil dari 1.5rem */
+      margin-top: -20px;
+      /* Tambahkan ini untuk menggeser logo ke atas */
+    }
+
+    .logo-container img {
+      width: 180px;
+      height: 90px;
+      object-fit: contain;
+      filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+    }
+
+    /* Penyesuaian layout info-content untuk logo yang konsisten */
+    .info-content.Login {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-end;
+      padding: 0 40px 0 0;
+    }
+
+    .info-content.Register {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 0 0 0 40px;
+    }
+
+    /* Perbaikan untuk logo - hanya satu yang terlihat pada satu waktu */
+    .info-content.Register .logo-container {
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    .container.active .info-content.Register .logo-container {
+      opacity: 1;
+    }
+
+    .info-content.Login .logo-container {
+      opacity: 1;
+      transition: opacity 0.5s ease;
+    }
+
+    .container.active .info-content.Login .logo-container {
+      opacity: 0;
+    }
+
+    /* Penyesuaian teks untuk keseimbangan visual */
+    .info-content h2 {
+      margin-top: 0;
+      margin-bottom: 8px;
+      font-size: 22px;
+    }
+
+    .info-content p {
+      line-height: 1.4;
+    }
+
+    /* PERBAIKAN UTAMA: Menyesuaikan posisi form agar lebih ke atas */
+    .form-box.Login {
+      justify-content: flex-start;
+      padding-top: 20px;
+      /* Ditambahkan untuk menggeser form ke atas */
+    }
+
+    .form-box.Register {
+      padding-top: 15px;
+      /* Ditambahkan untuk menggeser form ke atas */
+    }
+
+    /* Mengurangi margin atas pada judul form */
+    .form-box h2 {
+      margin-top: 5px;
+      margin-bottom: 15px;
+      /* Diperbesar untuk keseimbangan */
+    }
+
+    /* Mengurangi margin atas pada input box */
+    .form-box .input-box {
+      margin-top: 10px;
+      /* Diperkecil dari 15px */
+    }
+
+    /* Mengurangi margin atas pada tombol */
+    .btn {
+      margin-top: 8px;
+      /* Diperkecil dari 15px */
+    }
+
+    /* Mengurangi margin pada link register */
+    .regi-link {
+      margin: 2px 0 0;
+      /* Diperkecil dari 8px 0 4px */
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="curved-shape"></div>
+    <div class="curved-shape2"></div>
+
+    <!-- Login Form -->
+    <div class="form-box Login">
+      <h2 class="animation" style="--D:0; --S:21">Login</h2>
+      <form method="post" action="/player/growid/login/validate" id="loginForm">
+        <input name="type" value="log" type="hidden" />
+        <input name="_token" value="<%= JSON.stringify(data) %>" type="hidden" />
+
+        <div class="input-box animation" style="--D:1; --S:22">
+          <input type="text" name="growId" id="loginGrowId" required>
+          <label for="loginGrowId">GrowID</label>
+          <box-icon type='solid' name='user' color="gray"></box-icon>
+          <div class="error-message" id="loginUsernameError"></div>
+        </div>
+
+        <div class="input-box animation" style="--D:2; --S:23">
+          <input type="password" name="password" id="loginPassword" required>
+          <label for="loginPassword">Password</label>
+          <box-icon name='lock-alt' type='solid' color="gray"></box-icon>
+          <div class="error-message" id="loginPasswordError"></div>
+        </div>
+
+        <div class="animation" style="--D:3; --S:24">
+          <button type="submit" id="loginButton" class="btn">Login</button>
+        </div>
+
+        <div class="regi-link animation" style="--D:4; --S:25">
+          <p>Don't have an account? <br> <a href="#" class="SignUpLink">Sign Up</a></p>
+        </div>
+      </form>
+    </div>
+
+    <div class="info-content Login">
+      <div class="logo-container">
+        <img src="/game_title.png" alt="Game Title Name">
+      </div>
+      <h2 class="animation" style="--D:0; --S:20">WELCOME BACK!</h2>
+      <p class="animation" style="--D:1; --S:21">We are happy to have you with us again. If you need anything, we are
+        here to help.</p>
+    </div>
+
+    <!-- Registration Form -->
+    <div class="form-box Register">
+      <h2 class="animation" style="--li:17; --S:0">Register</h2>
+      <form method="post" action="/player/growid/login/validate" id="regisForm">
+        <input name="type" value="reg" type="hidden" />
+        <input name="_token" value="<%= JSON.stringify(data) %>" type="hidden" />
+
+        <div class="input-box animation" style="--li:18; --S:1">
+          <input type="text" name="growId" id="regisGrowId" required>
+          <label for="regisGrowId">GrowID</label>
+          <box-icon type='solid' name='user' color="gray"></box-icon>
+          <div class="error-message" id="regisUsernameError"></div>
+        </div>
+
+        <div class="input-box animation" style="--li:19; --S:2">
+          <input type="email" name="email" id="regisEmail" required>
+          <label for="regisEmail">Email</label>
+          <box-icon name='envelope' type='solid' color="gray"></box-icon>
+          <div class="error-message" id="regisEmailError"></div>
+        </div>
+
+        <div class="input-box animation" style="--li:19; --S:3">
+          <input type="password" name="password" id="regisPassword" required>
+          <label for="regisPassword">Password</label>
+          <box-icon name='lock-alt' type='solid' color="gray"></box-icon>
+          <div class="error-message" id="regisPasswordError"></div>
+        </div>
+
+        <div class="animation" style="--li:20; --S:4">
+          <button type="submit" id="regisButton" class="btn">Register</button>
+        </div>
+
+        <div class="regi-link animation" style="--li:21; --S:5">
+          <p>Already have an account? <br> <a href="#" class="SignInLink">Sign In</a></p>
+        </div>
+      </form>
+    </div>
+
+    <div class="info-content Register">
+      <div class="logo-container">
+        <img src="/game_title.png" alt="Game Title Name">
+      </div>
+      <h2 class="animation" style="--D:0; --S:20">WELCOME!</h2>
+      <p class="animation" style="--li:18; --S:1">We're delighted to have you here. If you need any assistance, feel
+        free to reach out.</p>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      console.log("DOM ready");
+      // Load saved GrowID if available
+      if (localStorage.getItem('growId')) {
+        const loginGrowId = document.getElementById('loginGrowId');
+        if (loginGrowId) {
+          loginGrowId.value = localStorage.getItem('growId');
+        }
+      }
+
+      // Validation Functions
+      const validateUsername = (username, errorElement) => {
+        if (!username) {
+          showValidationError(errorElement, 'Please enter username');
+          return false;
+        } else if (username.length < 4) {
+          showValidationError(errorElement, 'Minimum 4 characters');
+          return false;
+        } else if (!/^[a-zA-Z0-9]+$/.test(username)) {
+          showValidationError(errorElement, 'Invalid input username');
+          return false;
+        } else if (username.length > 20) {
+          showValidationError(errorElement, 'Maximum 20 characters');
+          return false;
+        }
+        return true;
+      };
+
+      const validatePassword = (password, errorElement) => {
+        if (!password) {
+          showValidationError(errorElement, 'Please enter password');
+          return false;
+        } else if (password.length < 6) {
+          showValidationError(errorElement, 'Minimum 6 characters');
+          return false;
+        }
+        return true;
+      };
+
+      const validateEmail = (email, errorElement) => {
+        if (!email) {
+          showValidationError(errorElement, 'Please enter email');
+          return false;
+        } else if (!/^\S+@\S+\.\S+$/.test(email)) {
+          showValidationError(errorElement, 'Invalid email format');
+          return false;
+        }
+        return true;
+      };
+
+      const showValidationError = (errorElement, message) => {
+        if (errorElement) {
+          errorElement.innerHTML = message;
+          errorElement.classList.add('show');
+        }
+      };
+
+      function resetErrors(formId) {
+        const form = document.getElementById(formId);
+        const errorMessages = form.querySelectorAll('.error-message');
+        errorMessages.forEach(error => {
+          error.classList.remove('show');
+        });
+      }
+
+      // Registration Form Handling
+      const form_regis = document.getElementById('regisForm');
+      if (form_regis) {
+        form_regis.addEventListener('submit', function (e) {
+          e.preventDefault();
+          console.log("Register form submitted");
+
+          const uName = document.getElementById('regisGrowId')?.value.trim();
+          const uPass = document.getElementById('regisPassword')?.value.trim();
+          const uEmail = document.getElementById('regisEmail')?.value.trim();
+
+          resetErrors('regisForm');
+
+          const isUsernameValid = validateUsername(uName, document.getElementById('regisUsernameError'));
+          const isPasswordValid = validatePassword(uPass, document.getElementById('regisPasswordError'));
+          const isEmailValid = validateEmail(uEmail, document.getElementById('regisEmailError'));
+
+          if (isUsernameValid && isPasswordValid && isEmailValid) {
+            const regisButton = document.getElementById("regisButton");
+            regisButton.textContent = "Registering...";
+            regisButton.classList.add("loading");
+
+            setTimeout(function () {
+              form_regis.submit();
+              localStorage.setItem('tempGrowId', uName);
+              regisButton.textContent = "Register";
+              regisButton.classList.remove("loading");
+            }, 2000);
+          }
+        });
+
+        form_regis.querySelectorAll('input').forEach(input => {
+          input.addEventListener('input', function () {
+            const errorElement = this.parentElement.querySelector('.error-message');
+            if (errorElement && errorElement.classList.contains('error-message')) {
+              errorElement.classList.remove('show');
+            }
+          });
+        });
+      }
+
+      // Login Form Handling
+      const form_login = document.getElementById('loginForm');
+      if (form_login) {
+        form_login.addEventListener('submit', async function (e) {
+          e.preventDefault();
+          console.log("Login form submitted");
+
+          const growId = document.getElementById('loginGrowId')?.value.trim();
+          const password = document.getElementById('loginPassword')?.value.trim();
+
+          resetErrors('loginForm');
+
+          const isUsernameValid = validateUsername(growId, document.getElementById('loginUsernameError'));
+          const isPasswordValid = validatePassword(password, document.getElementById('loginPasswordError'));
+
+          if (isUsernameValid && isPasswordValid) {
+            const loginButton = document.getElementById("loginButton");
+            loginButton.textContent = "Logging in...";
+            loginButton.classList.add("loading");
+
+            setTimeout(function () {
+              form_login.submit();
+              localStorage.setItem('growId', growId);
+              loginButton.textContent = "Login";
+              loginButton.classList.remove("loading");
+            }, 2000);
+          }
+        });
+        form_login.querySelectorAll('input').forEach(input => {
+          input.addEventListener('input', function () {
+            const errorElement = this.parentElement.querySelector('.error-message');
+            if (errorElement && errorElement.classList.contains('error-message')) {
+              errorElement.classList.remove('show');
+            }
+          });
+        });
+      }
+
+      // Toggle Between Forms
+      const container = document.querySelector(".container");
+      const registerBtn = document.querySelector(".SignUpLink");
+      const loginBtn = document.querySelector(".SignInLink");
+
+      if (container && registerBtn && loginBtn) {
+        registerBtn.addEventListener("click", (e) => {
+          e.preventDefault();
+          container.classList.add("active");
+          resetErrors('regisForm');
+        });
+
+        loginBtn.addEventListener("click", (e) => {
+          e.preventDefault();
+          container.classList.remove("active");
+          resetErrors('loginForm');
+        });
+      }
+    });
+  </script>
+</body>
+
+</html>
